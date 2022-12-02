@@ -4,6 +4,7 @@ from .author_publication import *
 
 class Author(db.Model):
     __tablename__ = "author"
+    
     id = db.Column(db.Integer, primary_key=True)
     fname =  db.Column(db.String, nullable=False)
     lname =  db.Column(db.String, nullable=False)

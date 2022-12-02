@@ -1,28 +1,44 @@
 import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
+import contextlib
+from sqlalchemy import MetaData
 
-from App.database import create_db, get_migrate
+from App.database import create_db, get_migrate, clear
 from App.main import create_app
+
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 from App.controllers import ( create_author, get_all_authors_json, get_all_authors, get_author, get_author_by_name )
 # from App.controllers import ( get_all_items_json )
 from App.controllers import ( create_publication, get_all_publications_json )
-
+from App.controllers import *
+from App.models import *
 from datetime import date
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
 app = create_app()
-migrate = get_migrate(app)
-sys.argv[1] = [['richard','hammond'],['James', 'May'],['Jeremy', 'Clarkson']]
-# print(sys.argv[1])
+# migrate = get_migrate(app)
+# sys.argv[1] = [['richard','hammond'],['James', 'May'],['Jeremy', 'Clarkson']]
+# # print(sys.argv[1])
 
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
+    # meta = MetaData()
+    # with contextlib.closing(engine.connect()) as con:
+    #     trans = con.begin()
+    #     for table in reversed(meta.sorted_tables):
+    #         con.execute(table.delete())
+    #     trans.commit()
+    db.drop_all()
     create_db(app)
     print('database intialized')
+
+# @app.cli.command("drop", help="Creates and initializes the database")
+# def initialize():
+#     create_db(app)
+#     print('database intialized')
 
 '''
 User Commands
@@ -59,11 +75,23 @@ app.cli.add_command(user_cli) # add the group to the cli
 Generic Commands
 '''
 
-@app.cli.command("init")
-def initialize():
-    create_db(app)
-    print('database intialized')
+# @app.cli.command("init")
+# def initialize():
+#     create_db(app)
+#     print('database intialized')
 
+@app.cli.command("pubData")
+def printFeed():
+    pubauts = AuthorPublication.query.all()
+    print('|\tID\t|\tPublicationTitle\t\t|\tAuthorId\t|\tPublicationId\t|\tPosition\t|')
+    for pubaut in pubauts:
+        print('|\t' + str(pubaut.id) + '\t|\t' + pubaut.publicationTitle + '\t|\t' + str(pubaut.authorId )+ '\t\t|\t' + str(pubaut.publicationId) + '\t\t|\t' + str(pubaut.authorPosition )+ '\t\t|')
+
+@app.cli.command("pubTree")
+def printTree():
+    print (Author.query.all())
+    authorId = input(authid)
+    pub_tree(author)
 '''
 Test Commands
 '''
@@ -142,8 +170,8 @@ publication_cli = AppGroup('pub', help='pub object commands')
 
 # @click.option("--coauthor_ids", "-ca", multiple=True)
 @click.argument("authors", default= "[['James','May'],['James', 'May'],['Jeremy', 'Clarkson']]")
-@click.argument("title", default="Computer Science 7th Edition")
-@click.argument("url", default="www.comscfrfgh6d72a.com")
+@click.argument("title", default="Computer Science 1st Edition")
+@click.argument("url", default="www.comsci.com")
 @click.argument("publisher", default="CSpublications")
 @click.argument("date", default="05/08/2001")
 def create_publication_command(authors, title, url, publisher, date):
@@ -173,3 +201,5 @@ def list_publications():
 
 
 app.cli.add_command(publication_cli)
+
+

@@ -4,19 +4,23 @@ from .publication import *
 
 
 class AuthorPublication(db.Model):
+    
     id = db.Column(db.Integer, primary_key=True)
+    publicationTitle = db.Column(db.String, nullable=True)
     authorId = db.Column(db.Integer, db.ForeignKey('author.id'))
     publicationId = db.Column(db.Integer, db.ForeignKey('publication.id'))
     authorPosition = db.Column(db.Integer, nullable = False)
 
-    def __init__(self, authorId, publicationId, authorPosition):
+    def __init__(self, authorId, publicationTitle, publicationId, authorPosition):
         self.authorId = authorId
+        self.publicationTitle = publicationTitle
         self.publicationId = publicationId
         self.authorPosition = authorPosition
         
     def toJSON(self):
         return{
             'id': self.id,
+            'publicationTitle' : self.publicationTitle,
             'authorId': self.authorId,
             'publicationId': self.publicationId,
             'authorPosition': self.authorPosition,

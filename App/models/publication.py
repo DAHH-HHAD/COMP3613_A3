@@ -11,6 +11,7 @@ from .author_publication import *
 
 class Publication(db.Model):
     __tablename__ = "publication"
+    
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False, unique=False)
     url = db.Column(db.String(120), nullable=False, unique=True)

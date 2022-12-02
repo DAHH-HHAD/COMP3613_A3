@@ -12,20 +12,20 @@ def create_publication(authors, title, url, publisher, date):
     db.session.add(new_publication)
     db.session.commit()
     publication = Publication.query.filter_by(url = url).first()
-    create_authorPublication(authors, publication.id)
+    create_authorPublication(authors, title,  publication.id)
     return new_publication
 # create authorPublication when adding a new publication to an author
 # authors with position 0 are primary authors
 # get_author finds author by id and returns the author, if the author
 # does not exist, it calls create_author and returns the created author
-def create_authorPublication(authors, publicationId):
+def create_authorPublication(authors, title, publicationId):
     i = 0
     authors = ast.literal_eval(authors)
     # new_authorPublication = AuthorPublication(authorId, publicationId, authorPosition)
     for author in authors:
         print(author)
         author = get_author(author[0], author[1])
-        new_authorPublication = AuthorPublication(authorId = author.id, publicationId = publicationId, authorPosition = i)
+        new_authorPublication = AuthorPublication(authorId = author.id, publicationTitle = title, publicationId = publicationId, authorPosition = i)
         db.session.add(new_authorPublication)
         db.session.commit()
         print('pubAuth created!')
