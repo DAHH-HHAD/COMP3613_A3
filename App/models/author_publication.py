@@ -1,14 +1,35 @@
 from App.database import db
+from .author import *
+from .publication import *
 
 
-AuthorPublication = db.Table(
-    "authorpublication",
-    db.Column("author_id", db.ForeignKey("author.id"), primary_key=True),
-    db.Column("publication_id", db.ForeignKey("publication.id"), primary_key=True)
-)
+class AuthorPublication(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    authorId = db.Column(db.Integer, db.ForeignKey('author.id'))
+    publicationId = db.Column(db.Integer, db.ForeignKey('publication.id'))
+    authorPosition = db.Column(db.Integer, nullable = False)
 
-CoAuthorPublication = db.Table(
-    "coauthorpublication",
-    db.Column("author_id", db.ForeignKey("author.id"), primary_key=True),
-    db.Column("publication_id", db.ForeignKey("publication.id"), primary_key=True)
-)
+    def __init__(self, authorId, publicationId, authorPosition):
+        self.authorId = authorId
+        self.publicationId = publicationId
+        self.authorPosition = authorPosition
+        
+    def toJSON(self):
+        return{
+            'id': self.id,
+            'authorId': self.authorId,
+            'publicationId': self.publicationId,
+            'authorPosition': self.authorPosition,
+        }
+
+# AuthorPublication = db.Table(
+#     "authorpublication",
+#     db.Column("author_id", db.ForeignKey("author.id"), primary_key=True),
+#     db.Column("publication_id", db.ForeignKey("publication.id"), primary_key=True)
+# )
+
+# CoAuthorPublication = db.Table(
+#     "coauthorpublication",
+#     db.Column("author_id", db.ForeignKey("author.id"), primary_key=True),
+#     db.Column("publication_id", db.ForeignKey("publication.id"), primary_key=True)
+# )
