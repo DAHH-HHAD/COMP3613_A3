@@ -4,7 +4,7 @@ from flask.cli import with_appcontext, AppGroup
 import contextlib
 from sqlalchemy import MetaData
 
-from App.database import create_db, get_migrate, clear
+from App.database import create_db, get_migrate, clear, db
 from App.main import create_app
 
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
@@ -33,7 +33,39 @@ def initialize():
     #     trans.commit()
     db.drop_all()
     create_db(app)
-    print('database intialized')
+    db.session.commit()
+    a1 = Author(fname='Angela', lname='Broski', email='angelabski@gmail.com', institution='UWI', qualifications='MSc. Biology')
+    a2 = Author(fname='Jeff', lname='Weenie', email='jweenie3@gmail.com', institution='UWI', qualifications='MSc. Computer Science')
+    a3 = Author(fname='Carla', lname='Marla', email='cm07@gmail.com', institution='UWI', qualifications='MSc.Party')
+    a4 = Author(fname='Sana', lname='Marsh', email='samarsh@hotmail.com', institution='UWI', qualifications='MSc. Apples')
+    a5 = Author(fname='Fredrick', lname='Street', email='fredstreet@outlook.com', institution='UWI', qualifications='MSc. Painting')
+    a6 = Author(fname='Phil', lname='Mill', email='phmill@hotmail.com', institution='UWI', qualifications='MSc. Biochemical Engineering')
+    a7 = Author(fname='Afrika', lname='Toto', email='totoafrika22@gmail.com', institution='UWI', qualifications='MSc. Music')
+    db.session.add_all([a1, a2, a3, a4, a5, a6, a7])
+    db.session.commit()
+
+    p1 = create_publication("[['Angela','Broski'], ['Fredrick','Street'], ['Jeff','Weenie']]", title='The Biology of Life',url='www.comsci.com',publisher='CSpublications',date='05/09/2010')
+    p2 = create_publication("[['Sana','Marsh'],['Angela','Broski'], ['Fredrick','Street']]", title='Different Types of Ferns',url='www.biology.com',publisher='Biopublications',date='10/05/2008')
+    p3 = create_publication("[['Phil','Mill'],['Angela','Broski'], ['Sana','Marsh']]", title='Exploring the Universe',url='www.spacelovers.com',publisher='Spacepublications',date='13/08/2007')
+    p4 = create_publication("[['Fredrick','Street'],['Afrika','Toto'], ['Sana','Marsh']]", title='Computers and Networks',url='www.comscii.com',publisher='CSpublications',date='04/10/2004')
+    db.session.add_all([p1, p2, p3, p4])
+    db.session.commit
+
+    print('database intialized with some data')
+
+# |       ID      |       PublicationTitle                |       AuthorId        |       PublicationId   |       Position        |
+# |       1       |       The Biology of Life             |       1               |       1               |       0               |
+# |       2       |       The Biology of Life             |       5               |       1               |       1               |
+# |       3       |       The Biology of Life             |       2               |       1               |       2               |
+# |       4       |       Different Types of Ferns        |       4               |       2               |       0               |
+# |       5       |       Different Types of Ferns        |       1               |       2               |       1               |
+# |       6       |       Different Types of Ferns        |       5               |       2               |       2               |
+# |       7       |       Exploring the Universe          |       6               |       3               |       0               |
+# |       8       |       Exploring the Universe          |       1               |       3               |       1               |
+# |       9       |       Exploring the Universe          |       4               |       3               |       2               |
+# |       10      |       Computers and Networks          |       5               |       4               |       0               |
+# |       11      |       Computers and Networks          |       2               |       4               |       1               |
+# |       12      |       Computers and Networks          |       4               |       4               |       2               |
 
 # @app.cli.command("drop", help="Creates and initializes the database")
 # def initialize():
@@ -90,8 +122,8 @@ def printFeed():
 @app.cli.command("pubTree")
 def printTree():
     print (Author.query.all())
-    authorId = input(authid)
-    pub_tree(author)
+    authorId = input("Enter Id: ")
+    pub_tree_search(authorId)
 '''
 Test Commands
 '''

@@ -31,6 +31,72 @@ def create_authorPublication(authors, title, publicationId):
         print('pubAuth created!')
         i += 1
     return i
+
+# def add_author(Author, )
+
+#returns AuthorPublication if found for given author id's
+def get_AuthorPublication_by_authorId(id):
+    authpubs = AuthorPublication.query.filter_by(authorId = id).all()
+    if not authpubs:
+        return False
+    for authpub in authpubs:
+        print(authpub.publicationId)
+    print (authpubs)
+    return authpubs
+
+#returns AuthorPublication if found for given publication id's i.e list of authors on a publication
+def get_AuthorPublication_by_publicationId(id):
+    authpubs = AuthorPublication.query.filter_by(publicationId = id).all()
+    if not authpubs:
+        return False
+    for authpub in authpubs:
+        print(authpub.authorId)
+    print (authpubs)
+    return (authpubs)
+
+#this function returns publications of given author, the publications of their co-authors, and the
+#publications of the co-author's co-authors
+def pub_tree_search(authorID):
+    authpubs =  AuthorPublication.query.all()
+    stack = []
+    pubset = set()
+    authorset =  set()
+    if not authpubs:
+        return False
+    author = get_AuthorPublication_for_authorid(authorID)
+    if not author:
+        print ("Author not found")
+    stack.append(author)
+    authorset.add(author.authorId)
+    while stack:
+        author = stack.pop()
+        # author = get_AuthorPublication_for_authorid(authorID)
+        publications = get_AuthorPublication_by_authorId(authorID)
+        if not publications:
+             return false
+        for publication in publications:
+            pubset.add(publication.publicationId)
+            authors =  get_AuthorPublication_by_publicationId(publication.publicationId)
+            if not authors:
+                return false
+            for author in authors:
+                authorset.add(author.authorId)
+                if (author.authorId not in authorset):
+                    stack.append(author) 
+    print("Publications: ")            
+    for publication in pubset:
+        print( "\t" + str(publication)) 
+    print("authors")
+    for author in authorset:
+        print("\t" + str(author))
+                
+
+def get_AuthorPublication_for_authorid(id):
+    return  AuthorPublication.query.filter_by(authorId = id).first()
+
+
+    
+
     
 
 

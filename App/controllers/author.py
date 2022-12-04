@@ -25,6 +25,12 @@ def get_author(fname, lname):
         return (author)
     return author
 
+def get_author_by_id(id):
+    author = Author.query.filter_by(id = id).first()
+    if not author:
+        return []
+    return author
+
 def get_all_authors():
     return Author.query.all()
 
@@ -46,14 +52,19 @@ def get_author_by_name(fname):
         return authors
     return authors
 
+# def get_author_publications(id):
+#     author = get_author(id)
+#     if not author:
+#         return []
+#     return author.get_publications()
 def get_author_publications(id):
-    author = get_author(id)
+    author = get_author_by_id(id)
     if not author:
         return []
     return author.get_publications()
 
 def getpublicationtree(id):
-    author = get_author(id)
+    author = get_author_by_id(id)
     if not author:
         return []
     return author.get_publications()
