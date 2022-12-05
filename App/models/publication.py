@@ -3,6 +3,7 @@ from App.database import db
 from .author import *
 from .author_publication import *
 
+
 # AuthorPublication = db.Table(
 #     "authorpublication",
 #     db.Column("author_id", db.ForeignKey("author.id"), primary_key=True),

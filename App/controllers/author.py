@@ -1,5 +1,6 @@
 from App.models import Author
 from App.database import db
+from flask import Blueprint, render_template, jsonify
 
 
 def create_author(fname, lname, email, institution, qualifications):
@@ -30,6 +31,11 @@ def get_author_by_id(id):
     if not author:
         return []
     return author
+def get_author_by_id_toJSON(id):
+    author = Author.query.filter_by(id = id).first()
+    if not author:
+        return []
+    return author.toJSON
 
 def get_all_authors():
     return Author.query.all()

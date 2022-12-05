@@ -54,48 +54,52 @@ class UserUnitTests(unittest.TestCase):
 class AuthorUnitTests(unittest.TestCase):
 
     def test_new_author(self):
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        assert author.name == "Bob Moog" and author.dob == datetime.strptime("05/08/2001", "%d/%m/%Y") and author.qualifications == "BSc. Computer Science"
+        author = Author(fname='Carl', lname='Thompson', email='cto@gmail.com', institution='UWI', qualifications='MSc.Party')
+        assert author.fname == "Carl" and author.lname == "Thompson"and author.email == "cto@gmail.com" and author.institution == "UWI" and author.qualifications == "MSc.Party"
 
     def test_author_toJSON(self):
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
+        author = Author(fname='Carl', lname='Thompson', email='cto@gmail.com', institution='UWI', qualifications='MSc.Party')
         author_json = author.toJSON()
         self.assertDictEqual(author_json, {
-            "id": None,
-            "name": "Bob Moog",
-            "dob": datetime.strptime("05/08/2001", "%d/%m/%Y"),
-            "qualifications": "BSc. Computer Science"
+            'id': None,
+            'fname': "Carl",
+            'lname': "Thompson",
+            'email': "cto@gmail.com",
+            'institution': "UWI",
+            'qualifications': "MSc.Party",
         })
 
 class PublicationUnitTests(unittest.TestCase):
     def test_new_publication(self):
-        authors = []
-        coauthors = []
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        authors.append(author)
-        coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
-        coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", authors, coauthors)
+        # authors = []
+        # coauthors = []
+        # author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
+        # authors.append(author)
+        # coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
+        # coauthors.append(coauthor)
+        publication = Publication(title='The Biology of Life',url='www.comsci.com',publisher='CSpublications',date='05/09/2010')
         assert (
-            publication.title=="Intro to Computer Science" 
-            and publication.authors==authors 
-            and publication.coauthors==coauthors
+            publication.title == 'The Biology of Life'
+            and publication.url== 'www.comsci.com'
+            and publication.publisher== 'CSpublications'
+            and publication.date == datetime.strptime('05/09/2010', "%d/%m/%Y")
         )
 
     def test_publication_toJSON(self):
-        authors = []
-        coauthors = []
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        authors.append(author)
-        coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
-        coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", authors, coauthors)
+        # authors = []
+        # coauthors = []
+        # author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
+        # authors.append(author)
+        # coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
+        # coauthors.append(coauthor)
+        publication = Publication(title='The Biology of Life',url='www.comsci.com',publisher='CSpublications',date='05/09/2010')
         publication_json = publication.toJSON()
         self.assertDictEqual(publication_json, {
             "id": None,
-            "title": "Intro to Computer Science",
-            "authors": [author.toJSON() for author in authors],
-            "coauthors": [coauthor.toJSON() for coauthor in coauthors]
+            "title": "The Biology of Life",
+            "url": "www.comsci.com", 
+            "publisher": "CSpublications", 
+            "date": datetime.strptime('05/09/2010', "%d/%m/%Y"),
         })
 
 '''
@@ -139,32 +143,35 @@ class UsersIntegrationTests(unittest.TestCase):
 
 class AuthorIntegrationTests(unittest.TestCase):
     def test_create_author(self):
-        author = create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        assert author.name == "Bob Moog"
+        author = create_author("Bob", "Moog", "bob@gmail.com", "UWI", "BSc. Computer Science")
+        # author = create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")
+        assert author.fname == "Bob" and author.lname == "Moog"
 
     def test_get_all_authors_json(self):
         author_json=get_all_authors_json()
         self.assertListEqual([{
             'id': 1,
-            "name": "Bob Moog",
-            "dob":datetime.strptime("05/08/2001", "%d/%m/%Y"),
-            "qualifications":"BSc. Computer Science"
+            'fname': "Bob",
+            'lname': "Moog",
+            'email': "bob@gmail.com",
+            'institution': "UWI",
+            'qualifications': "BSc. Computer Science",
             }
             ], author_json)
 
 class PublicationIntegrationTests(unittest.TestCase):
     def test_create_publication(self):
-        author = get_author(1)
-        authors = []
-        if author:
-            authors.append(author)
-        else:
-            authors.append(create_author("Bob Moog", "05/08/2001", "BSc. Computer Science"))
+        # author = get_author(1)
+        # authors = []
+        # if author:
+        #     authors.append(author)
+        # else:
+        #     authors.append(create_author("Bob Moog", "05/08/2001", "BSc. Computer Science"))
             
             
-        coauthors = []
-        publication=create_publication("Intro to Computer Science",authors, coauthors)
-        assert publication.title=="Intro to Computer Science"
+        # coauthors = []
+        publication= create_publication("[['James','May'], ['Richard','Hammond'], ['Jeremy','Clarkson']]", title='The Biology of Life 2',url='www.comsci2.com',publisher='CSpublications',date='05/09/2010')
+        assert publication.title=="The Biology of Life 2"
 
 
     def test_get_publication_json(self):
@@ -172,15 +179,10 @@ class PublicationIntegrationTests(unittest.TestCase):
         self.assertListEqual([
             {
                 "id": 1,
-                "title":"Intro to Computer Science",
-                "authors":[
-                    {
-                        "id": 1,
-                        "name": "Bob Moog",
-                        "dob": datetime.strptime("05/08/2001", "%d/%m/%Y"),
-                        "qualifications": "BSc. Computer Science"
-                    }
-                ],
-                "coauthors":[]
+                "title": "The Biology of Life 2",
+                "url": "www.comsci2.com", 
+                "publisher": "CSpublications", 
+                "date": datetime.strptime('05/09/2010', "%d/%m/%Y"),
+                  
             }
         ], publication_json)

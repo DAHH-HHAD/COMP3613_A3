@@ -44,8 +44,8 @@ def initialize():
     db.session.add_all([a1, a2, a3, a4, a5, a6, a7])
     db.session.commit()
 
-    p1 = create_publication("[['Angela','Broski'], ['Fredrick','Street'], ['Jeff','Weenie']]", title='The Biology of Life',url='www.comsci.com',publisher='CSpublications',date='05/09/2010')
-    p2 = create_publication("[['Sana','Marsh'],['Angela','Broski'], ['Fredrick','Street']]", title='Different Types of Ferns',url='www.biology.com',publisher='Biopublications',date='10/05/2008')
+    p1 = create_publication("[['Angela','Broski'], ['Fredrick','Street'], ['Sana','Marsh']]", title='The Biology of Life',url='www.comsci.com',publisher='CSpublications',date='05/09/2010')
+    p2 = create_publication("[['Sana','Marsh'],['Jeff','Weenie'], ['Fredrick','Street']]", title='Different Types of Ferns',url='www.biology.com',publisher='Biopublications',date='10/05/2008')
     p3 = create_publication("[['Phil','Mill'],['Angela','Broski'], ['Sana','Marsh']]", title='Exploring the Universe',url='www.spacelovers.com',publisher='Spacepublications',date='13/08/2007')
     p4 = create_publication("[['Fredrick','Street'],['Afrika','Toto'], ['Sana','Marsh']]", title='Computers and Networks',url='www.comscii.com',publisher='CSpublications',date='04/10/2004')
     db.session.add_all([p1, p2, p3, p4])
