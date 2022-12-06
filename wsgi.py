@@ -207,9 +207,7 @@ publication_cli = AppGroup('pub', help='pub object commands')
 @click.argument("publisher", default="CSpublications")
 @click.argument("date", default="05/08/2001")
 def create_publication_command(authors, title, url, publisher, date):
-    # authors = [get_author(id) for id in author_ids]
-    # coauthors = [get_author(id) for id in coauthor_ids]
-    # # a = get_author(author_ids)
+
     create_publication(authors, title, url, publisher, date)
     print(f'{title} created!')
 

@@ -59,10 +59,6 @@ def get_publications_for_author():
         pub = get_publication_by_id_toJSON(publication.publicationId)
         list1.append(pub)
 
-    # if query:
-    #     query = query.lower()
-    #     print(query)
-    #     pubs = filter(lambda pub: query in pub['title'].lower(), pubs)
     return jsonify(list1), 200
 
 @user_views.route('/publication', methods=["GET"])
@@ -76,15 +72,7 @@ def get_publications_by_id():
     print (str(pubs) + "weijnw")
     if not pubs:
         return (jsonify({'message': f"no Publications found found for: {str(pub_id)}"}))
-    # list1 = []            
-    # for publication in pubs:
-    #     print( "\t" + str(publication)) 
-    #     pub = get_publication_by_id_toJSON(publication.publicationId)
-    #     list1.append(pub)
-    # if query:
-    #     query = query.lower()
-    #     print(query)
-    #     pubs = filter(lambda pub: query in pub['title'].lower(), pubs)
+
     return jsonify(pubs), 200
         
 
@@ -96,10 +84,7 @@ def post_publication():
     if not data:
         return "Missing request body.", 400
     author_names = data['authors']
-    # coauthor_names = data['coauthors']
-    # authors = sum ( [get_author(fname,lname) for fname,lname in author_names], [] )                
-    # coauthors = sum ( [get_author_by_name(name) for name in coauthor_names], [] )
-    # return jsonify(author_names)
+
     for name in author_names:
         aut = name.split(" ")
         print(aut)
